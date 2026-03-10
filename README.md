@@ -141,7 +141,7 @@ databricks-qos/
 ### Step 1 — Clone the repository into Databricks Repos
 
 1. In Databricks, go to **Repos → Add Repo**
-2. Enter your GitHub URL: `https://github.com/<your-org>/databricks-qos`
+2. Enter this GitHub URL: `https://github.com/BalaAmavasai/databricks-5G-QoS`
 3. Click **Create Repo**
 
 ### Step 2 — Set the repo root path
@@ -149,12 +149,12 @@ databricks-qos/
 In each notebook, update `REPO_ROOT` to match your Repos path:
 
 ```python
-REPO_ROOT = "/Workspace/Repos/<your-username>/databricks-qos"
+REPO_ROOT = "/Workspace/Repos/<your-username>/databricks-5G-QoS"
 ```
 
 Or set it as a cluster environment variable:
 ```
-QOS_REPO_ROOT = /Workspace/Repos/<your-username>/databricks-qos
+QOS_REPO_ROOT = /Workspace/Repos/<your-username>/databricks-5G-QoS
 ```
 
 ### Step 3 — Configure Delta Lake paths (optional)
