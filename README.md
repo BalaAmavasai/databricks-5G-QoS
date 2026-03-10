@@ -56,7 +56,7 @@ A configurable fraction (default 5%) of events simulate degraded radio condition
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Notebook 02: Data Simulator                                         │
+│  Notebook 02: Data Simulator                                        │
 │  qos_simulator.generate_batch() → Spark DataFrame                   │
 └───────────────────────────┬─────────────────────────────────────────┘
                             │ append
@@ -68,8 +68,8 @@ A configurable fraction (default 5%) of events simulate degraded radio condition
                             │ readStream
                             ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Notebook 03: Streaming Pipeline                                     │
-│  • Type casting & validation                                         │
+│  Notebook 03: Streaming Pipeline                                    │
+│  • Type casting & validation                                        │
 │  • Signal quality classification (RSRP → Excellent/Good/Fair/Poor)  │
 │  • SLA breach detection (per slice SLA thresholds)                  │
 └───────────────────────────┬─────────────────────────────────────────┘
