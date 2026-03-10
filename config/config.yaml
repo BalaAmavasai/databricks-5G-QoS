@@ -1,0 +1,86 @@
+# =============================================================================
+# Databricks 5G QoS Streaming Demo - Configuration
+# =============================================================================
+# All paths use DBFS or Unity Catalog references; update to match your workspace.
+
+# ---------------------------------------------------------------------------
+# Catalog & Schema (Unity Catalog)
+# If using legacy Hive metastore, set catalog to "" and schema to your db name.
+# ---------------------------------------------------------------------------
+catalog: "main"
+schema: "qos_5g_demo"
+
+# ---------------------------------------------------------------------------
+# Delta Lake storage paths
+# ---------------------------------------------------------------------------
+paths:
+  base: "/tmp/qos_5g_demo"                       # DBFS base path for Delta tables
+  bronze: "/tmp/qos_5g_demo/bronze/ue_events"    # Raw simulated UE events
+  silver: "/tmp/qos_5g_demo/silver/ue_events"    # Validated & enriched events
+  gold_cell: "/tmp/qos_5g_demo/gold/cell_kpis"   # Per-cell windowed KPIs
+  gold_slice: "/tmp/qos_5g_demo/gold/slice_kpis" # Per-slice windowed KPIs
+  gold_sla: "/tmp/qos_5g_demo/gold/sla_violations" # SLA breach events
+  checkpoints: "/tmp/qos_5g_demo/checkpoints"    # Streaming checkpoints
+
+# ---------------------------------------------------------------------------
+# Simulator settings
+# ---------------------------------------------------------------------------
+simulator:
+  num_cells: 20            # Number of simulated gNodeB cells
+  num_ues_per_cell: 10     # Concurrent UEs per cell
+  events_per_second: 50    # Target event generation rate
+  batch_interval_sec: 5    # Seconds between simulator write batches
+  anomaly_rate: 0.05       # Fraction of events with degraded QoS
+
+# ---------------------------------------------------------------------------
+# Streaming pipeline settings
+# ---------------------------------------------------------------------------
+streaming:
+  trigger_interval: "10 seconds"   # Structured Streaming trigger interval
+  window_duration: "1 minute"      # Aggregation window size
+  slide_duration: "30 seconds"     # Sliding window step
+  watermark_delay: "30 seconds"    # Late-data watermark
+
+# ---------------------------------------------------------------------------
+# 5G Network Slice definitions
+# ---------------------------------------------------------------------------
+slices:
+  - id: "S1"
+    type: "eMBB"
+    description: "Enhanced Mobile Broadband"
+    sla:
+      min_dl_throughput_mbps: 100.0
+      min_ul_throughput_mbps: 20.0
+      max_latency_ms: 10.0
+      max_packet_loss_pct: 0.1
+      max_jitter_ms: 5.0
+
+  - id: "S2"
+    type: "URLLC"
+    description: "Ultra-Reliable Low Latency Communications"
+    sla:
+      min_dl_throughput_mbps: 10.0
+      min_ul_throughput_mbps: 5.0
+      max_latency_ms: 1.0
+      max_packet_loss_pct: 0.001
+      max_jitter_ms: 0.5
+
+  - id: "S3"
+    type: "mMTC"
+    description: "Massive Machine Type Communications"
+    sla:
+      min_dl_throughput_mbps: 1.0
+      min_ul_throughput_mbps: 0.5
+      max_latency_ms: 100.0
+      max_packet_loss_pct: 1.0
+      max_jitter_ms: 50.0
+
+# ---------------------------------------------------------------------------
+# Alert thresholds (used in analytics notebook)
+# ---------------------------------------------------------------------------
+alerts:
+  rsrp_poor_threshold_dbm: -110    # RSRP below this = poor signal
+  rsrq_poor_threshold_db: -15      # RSRQ below this = poor quality
+  sinr_poor_threshold_db: 0        # SINR below this = poor SINR
+  bler_high_threshold_pct: 10.0    # BLER above this = high error rate
+  rb_congestion_threshold_pct: 85.0 # RB utilisation above this = congested
